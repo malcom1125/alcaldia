@@ -58,6 +58,16 @@ body {
     }
 }
 
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 @keyframes categorySelectAnimation {
     from {
         opacity: 0;
@@ -93,19 +103,17 @@ body {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
     color: white;
     padding: 2rem 0;
-}
-
-.header {
+    animation: fadeOut 0.5s ease-out backwards;
     animation: slideInFromTop 1s ease-out;
     animation-delay: 0.3s;
     animation-fill-mode: backwards;
-  }
+}
 
 .header-content {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position: relative;   
 }
 
 .logo {
@@ -114,27 +122,19 @@ body {
     gap: 1rem;
 }
 
-.logo-letter {
-    font-size: 5.55rem; 
-    font-weight: 700; /* Make it bolder */
-   
-    position: absolute;
-    left: 0;
-    animation: pulse 2s ease-in-out infinite;
-}
-
 .logo h1 {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: bold;
     text-align: center;
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+.logo-letter {
+    font-size: 3.5rem; 
+    font-weight: 700;
+    position: absolute;
+    left: 0;
+    animation: heartbeat 2s ease-in-out infinite;
 }
-
 
 
 /* Search Section */
