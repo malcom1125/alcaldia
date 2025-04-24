@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
     <title>Vacílate la Informada</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-letter">G</span>
-                    <h1>VACÍLATE LA INFORMADA</h1>
+<body> 
+    <div id="header">
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <span class="logo-letter">G</span>
+                        <h1>VACÍLATE LA INFORMADA</h1>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
-
+        </header>
+    </div>
+    
+    
     <main class="main">
         <div class="container">
             <div class="search-section">
@@ -45,6 +50,8 @@
 
             <div class="convocatorias-grid" id="convocatorias-container">
                 <!-- Las convocatorias se insertarán aquí dinámicamente -->
+                <div class="convocatoria-card"></div>
+                
             </div>
         </div>
     </main>

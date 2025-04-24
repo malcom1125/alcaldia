@@ -27,6 +27,60 @@ body {
     color: var(--color-gray-800);
 }
 
+/* Animations */
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes categorySelectAnimation {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .container {
     width: 100%;
     max-width: 1200px;
@@ -40,6 +94,12 @@ body {
     color: white;
     padding: 2rem 0;
 }
+
+.header {
+    animation: slideInFromTop 1s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
+  }
 
 .header-content {
     display: flex;
@@ -55,10 +115,12 @@ body {
 }
 
 .logo-letter {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 5.55rem; 
+    font-weight: 700; /* Make it bolder */
+   
     position: absolute;
     left: 0;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .logo h1 {
@@ -66,6 +128,14 @@ body {
     font-weight: bold;
     text-align: center;
 }
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
 
 /* Search Section */
 .search-section {
@@ -114,7 +184,17 @@ body {
     background-color: var(--color-primary);
     color: white;
     cursor: pointer;
+    display: flex;
+    align-items: center;
     min-width: 200px;
+}
+.category-filter select {
+    transition: background-color 0.3s, color 0.3s;
+    animation: categorySelectAnimation 0.5s ease-out forwards;
+}
+.category-filter select:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-gray-50);
 }
 
 /* Section Header */
@@ -164,6 +244,11 @@ body {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     color: white;
+}
+.convocatoria-card {
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
 }
 
 .convocatoria-card:hover {
@@ -302,6 +387,8 @@ body {
 }
 
 .modal-section p {
+    animation: slideInFromLeft 0.5s ease-out;
+    animation-delay: 0.3s;
     color: var(--color-gray-600);
 }
 
@@ -313,11 +400,25 @@ body {
 .modal-section li {
     margin-bottom: 0.25rem;
 }
+.modal-header h2 {
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
 
+}
+.modal-section ul {
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
+}
 .modal-info {
     display: flex;
     gap: 1rem;
     padding-top: 1rem;
+    animation: fadeIn 0.5s ease-out;
+    animation-delay: 0.3s;
+    animation-fill-mode: backwards;
+
     border-top: 1px solid var(--color-gray-200);
     margin-bottom: 1.5rem;
 }
@@ -338,8 +439,13 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 1rem;
+        font-size: 1rem;
+    transform-origin: center;
     transition: background-color 0.2s;
+    animation: heartbeat 1s ease-in-out infinite;
+}
+.button-primary:hover {
+    transform: scale(1.02);
 }
 
 .button-primary:hover {

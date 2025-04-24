@@ -1,4 +1,19 @@
 // Datos de ejemplo
+
+// Función para codificar texto y prevenir XSS
+function encodeText(text) {
+    if (typeof text !== 'string') {
+        console.error('encodeText: Input is not a string', text);
+        return '';
+    }
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+
+
+
 const convocatorias = [
     {
         id: 1,
@@ -54,13 +69,19 @@ let convocatoriaSeleccionada = null;
 let convocatoriasFiltradas = [...convocatorias];
 
 // Función para crear una tarjeta de convocatoria
+// Función para crear una tarjeta de convocatoria
 function crearTarjetaConvocatoria(convocatoria) {
-    return `
-        <div class="convocatoria-card" onclick="abrirModal(${convocatoria.id})">
+    if (!convocatoria || !convocatoria.id) {
+        console.error('Error: Convocatoria o ID inválido.', convocatoria);
+        return '<div class="convocatoria-card">Error: Datos inválidos</div>';
+    }
+    try {
+         return `
+        <div class="convocatoria-card" onclick="abrirModal(${encodeURIComponent(convocatoria.id)})">
             <div class="card-content">
                 <div class="card-header">
-                    <h3 class="card-title">${convocatoria.titulo}</h3>
-                    <span class="card-tag">${convocatoria.area}</span>
+                    <h3 class="card-title">${encodeText(convocatoria.titulo)}</h3>
+                    <span class="card-tag">${encodeText(convocatoria.area)}</span>
                 </div>
                 <p class="card-description">${convocatoria.descripcion}</p>
                 <div class="card-info">
@@ -77,27 +98,43 @@ function crearTarjetaConvocatoria(convocatoria) {
             </div>
         </div>
     `;
+    } catch (error) {
+        console.error("Error al crear la tarjeta de convocatoria:", error);
+        return `<div class="convocatoria-card">Error al cargar la convocatoria</div>`;
+    }
+
 }
 
 // Función para renderizar todas las convocatorias
 function renderizarConvocatorias() {
     const container = document.getElementById('convocatorias-container');
-    container.innerHTML = convocatoriasFiltradas.map(crearTarjetaConvocatoria).join('');
+    try{
+        container.innerHTML = convocatoriasFiltradas.map(crearTarjetaConvocatoria).join('');
+    } catch (error){
+         console.error("Error al renderizar las convocatorias:", error);
+         container.innerHTML = '<div class="convocatoria-card">Error al cargar las convocatorias</div>';
+    }
+   
 }
 
 // Función para abrir el modal
 function abrirModal(id) {
-    const convocatoria = convocatorias.find(c => c.id === id);
-    if (!convocatoria) return;
-
-    convocatoriaSeleccionada = convocatoria;
+    try {
+        const convocatoria = convocatorias.find(c => c.id === Number(id));
+        if (!convocatoria) {
+             console.error("Error: ID de convocatoria inválido.", id);
+             return;
+        }
+        convocatoriaSeleccionada = convocatoria;
     
-    document.getElementById('modal-title').textContent = convocatoria.titulo;
-    document.getElementById('modal-description').textContent = convocatoria.descripcion;
-    document.getElementById('modal-fecha').textContent = `Fecha límite: ${convocatoria.fecha_limite}`;
-    document.getElementById('modal-cupos').textContent = `${convocatoria.cupos} cupos disponibles`;
-    document.getElementById('modal-image').src = convocatoria.imagen;
-    document.getElementById('modal-image').alt = convocatoria.titulo;
+        document.getElementById('modal-title').textContent = encodeText(convocatoria.titulo);
+        document.getElementById('modal-description').textContent = encodeText(convocatoria.descripcion);
+        document.getElementById('modal-fecha').textContent = `Fecha límite: ${encodeText(convocatoria.fecha_limite)}`;
+        document.getElementById('modal-cupos').textContent = `${encodeText(convocatoria.cupos)} cupos disponibles`;
+        document.getElementById('modal-image').src = encodeText(convocatoria.imagen);
+        document.getElementById('modal-image').alt = encodeText(convocatoria.titulo);
+    
+   
     
     const requisitosLista = document.getElementById('modal-requisitos');
     requisitosLista.innerHTML = convocatoria.requisitos
@@ -109,6 +146,9 @@ function abrirModal(id) {
 
     document.getElementById('modal').classList.add('active');
     document.body.style.overflow = 'hidden';
+    } catch(error){
+         console.error("Error al abrir el modal:", error);
+    }
 }
 
 // Función para cerrar el modal
@@ -120,8 +160,12 @@ function closeModal() {
 
 // Función para manejar la inscripción
 function inscribirse() {
-    if (convocatoriaSeleccionada) {
-        window.open(convocatoriaSeleccionada.inscripcion_url, '_blank');
+    try {
+        if (convocatoriaSeleccionada) {
+             window.open(encodeText(convocatoriaSeleccionada.inscripcion_url), '_blank');
+        }
+    } catch(error){
+        console.error("Error al Inscribirse:", error);
         closeModal();
     }
 }
@@ -129,14 +173,18 @@ function inscribirse() {
 // Función para filtrar convocatorias
 function filtrarConvocatorias() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const categoria = document.getElementById('category-select').value;
-
-    convocatoriasFiltradas = convocatorias.filter(convocatoria => {
-        const matchSearch = convocatoria.titulo.toLowerCase().includes(searchTerm) ||
-                          convocatoria.descripcion.toLowerCase().includes(searchTerm);
-        const matchCategoria = categoria === 'TODOS' || convocatoria.area === categoria;
+     const categoria = document.getElementById('category-select').value;
+    try{
+        convocatoriasFiltradas = convocatorias.filter(convocatoria => {
+           const matchSearch = convocatoria.titulo.toLowerCase().includes(searchTerm) ||
+                              convocatoria.descripcion.toLowerCase().includes(searchTerm);
+           const matchCategoria = categoria === 'TODOS' || convocatoria.area === categoria;
+           return matchSearch && matchCategoria;
+       });
+    } catch (error){
+         console.error("Error al filtrar:", error);
         return matchSearch && matchCategoria;
-    });
+    };
 
     renderizarConvocatorias();
 }
